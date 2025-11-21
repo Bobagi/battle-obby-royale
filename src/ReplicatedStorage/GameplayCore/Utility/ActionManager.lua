@@ -19,7 +19,7 @@ local InputMetadata = require(script.InputMetadata)
 
 local player = Players.LocalPlayer :: Player
 local playerGui = player:WaitForChild("PlayerGui")
-local instances = script.Instances :: any
+local instances = require(script.Instances)
 local actionGui = instances.ActionGui
 
 local HORIZONTAL_PADDING = 40
