@@ -8,12 +8,12 @@
 	features such as momentum.
 --]]
 
+local ContextActionService = game:GetService("ContextActionService")
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 
 local Constants = require(ReplicatedStorage.GameplayCore.Movement.Constants)
-local ActionManager = require(ReplicatedStorage.GameplayCore.Utility.ActionManager)
 local Controller = require(script.Parent.Controller)
 
 local player = Players.LocalPlayer
@@ -69,9 +69,9 @@ local function onRenderStep(deltaTime: number)
 end
 
 local function onSpecialActionInput(_input: string, inputState: Enum.UserInputState, _inputObject: InputObject)
-	if inputState ~= Enum.UserInputState.Begin then
-		return
-	end
+        if inputState ~= Enum.UserInputState.Begin then
+                return
+        end
 
 	if not currentController then
 		return
@@ -82,19 +82,20 @@ local function onSpecialActionInput(_input: string, inputState: Enum.UserInputSt
 end
 
 local function initialize()
-	player.CharacterAdded:Connect(onCharacterAdded)
+        player.CharacterAdded:Connect(onCharacterAdded)
 
-	-- The default controls are bound on renderstep, so we'll bind at the highest priority to override them
-	RunService:BindToRenderStep(Constants.CONTROLLER_RENDER_STEP_BIND, Enum.RenderPriority.Last.Value, onRenderStep)
-	ActionManager.bindAction(
-		Constants.SPECIAL_ACTION_BIND,
-		onSpecialActionInput,
-		Constants.KEYBOARD_SPECIAL_KEY_CODE,
-		Constants.GAMEPAD_SPECIAL_KEY_CODE
-	)
+        -- The default controls are bound on renderstep, so we'll bind at the highest priority to override them
+        RunService:BindToRenderStep(Constants.CONTROLLER_RENDER_STEP_BIND, Enum.RenderPriority.Last.Value, onRenderStep)
+        ContextActionService:BindAction(
+                Constants.SPECIAL_ACTION_BIND,
+                onSpecialActionInput,
+                true,
+                Constants.KEYBOARD_SPECIAL_KEY_CODE,
+                Constants.GAMEPAD_SPECIAL_KEY_CODE
+        )
 
-	if player.Character then
-		onCharacterAdded(player.Character)
+        if player.Character then
+                onCharacterAdded(player.Character)
 	end
 end
 

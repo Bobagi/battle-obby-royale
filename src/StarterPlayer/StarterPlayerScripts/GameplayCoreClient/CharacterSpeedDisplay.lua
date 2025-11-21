@@ -3,51 +3,59 @@ local RunService = game:GetService("RunService")
 
 local localPlayer = Players.LocalPlayer
 
-local function getOrCreateSpeedTextLabel()
-	local playerGui = localPlayer:WaitForChild("PlayerGui")
+local CharacterSpeedDisplay = {}
 
-	local screenGui = playerGui:FindFirstChild("CharacterSpeedGui")
+local function getOrCreateSpeedTextLabel(hudRootGui: ScreenGui?)
+        local playerGui = localPlayer:WaitForChild("PlayerGui")
+        local speedHudRoot = hudRootGui
 
-	if not screenGui then
-		screenGui = Instance.new("ScreenGui")
-		screenGui.Name = "CharacterSpeedGui"
-		screenGui.ResetOnSpawn = false
-		screenGui.IgnoreGuiInset = true
-		screenGui.Parent = playerGui
-	end
+        if not speedHudRoot then
+                speedHudRoot = playerGui:FindFirstChild("CharacterSpeedGui")
+        end
 
-	local label = screenGui:FindFirstChild("SpeedLabel")
+        if not speedHudRoot then
+                speedHudRoot = Instance.new("ScreenGui")
+                speedHudRoot.Name = "CharacterSpeedGui"
+                speedHudRoot.ResetOnSpawn = false
+                speedHudRoot.IgnoreGuiInset = true
+                speedHudRoot.Parent = playerGui
+        end
 
-	if not label then
-		label = Instance.new("TextLabel")
-		label.Name = "SpeedLabel"
-		label.Size = UDim2.new(0, 160, 0, 40)
-		label.Position = UDim2.new(0, 10, 1, -50)
-		label.BackgroundTransparency = 0.3
-		label.TextScaled = true
-		label.Font = Enum.Font.GothamBold
-		label.TextColor3 = Color3.new(1, 1, 1)
-		label.Parent = screenGui
-	end
+        local speedTextLabel = speedHudRoot:FindFirstChild("SpeedLabel")
 
-	return label
+        if not speedTextLabel then
+                speedTextLabel = Instance.new("TextLabel")
+                speedTextLabel.Name = "SpeedLabel"
+                speedTextLabel.Size = UDim2.new(0, 160, 0, 40)
+                speedTextLabel.Position = UDim2.new(0, 10, 1, -50)
+                speedTextLabel.BackgroundTransparency = 0.3
+                speedTextLabel.TextScaled = true
+                speedTextLabel.Font = Enum.Font.GothamBold
+                speedTextLabel.TextColor3 = Color3.new(1, 1, 1)
+                speedTextLabel.Parent = speedHudRoot
+        end
+
+        return speedTextLabel
 end
 
-local speedTextLabel = getOrCreateSpeedTextLabel()
+function CharacterSpeedDisplay.initializeHud(sharedHudRoot: ScreenGui?)
+        local speedTextLabel = getOrCreateSpeedTextLabel(sharedHudRoot)
+        local currentRootPart
 
-local currentRootPart
+        localPlayer.CharacterAdded:Connect(function(character)
+                currentRootPart = character:WaitForChild("HumanoidRootPart")
+        end)
 
-localPlayer.CharacterAdded:Connect(function(character)
-	currentRootPart = character:WaitForChild("HumanoidRootPart")
-end)
+        if localPlayer.Character then
+                currentRootPart = localPlayer.Character:WaitForChild("HumanoidRootPart")
+        end
 
-if localPlayer.Character then
-	currentRootPart = localPlayer.Character:WaitForChild("HumanoidRootPart")
+        RunService.RenderStepped:Connect(function()
+                if currentRootPart then
+                        local speed = math.floor(currentRootPart.Velocity.Magnitude + 0.5)
+                        speedTextLabel.Text = "Speed: " .. tostring(speed)
+                end
+        end)
 end
 
-RunService.RenderStepped:Connect(function()
-	if currentRootPart then
-		local speed = math.floor(currentRootPart.Velocity.Magnitude + 0.5)
-		speedTextLabel.Text = "Speed: " .. tostring(speed)
-	end
-end)
+return CharacterSpeedDisplay

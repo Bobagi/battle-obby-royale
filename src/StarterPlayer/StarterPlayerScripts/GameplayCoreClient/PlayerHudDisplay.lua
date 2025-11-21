@@ -4,43 +4,56 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local localPlayer = Players.LocalPlayer
 local playerCoinsChangedEvent = ReplicatedStorage:WaitForChild("PlayerCoinsChangedEvent")
 
-local function getOrCreateHudRootGui()
-	local playerGui = localPlayer:WaitForChild("PlayerGui")
+local PlayerHudDisplay = {}
 
-	local root = playerGui:FindFirstChild("PlayerHudGui")
+local function getOrCreateHudRootGui(providedHudRootGui: ScreenGui?)
+        if providedHudRootGui then
+                providedHudRootGui.Parent = localPlayer:WaitForChild("PlayerGui")
+                return providedHudRootGui
+        end
 
-	if not root then
-		root = Instance.new("ScreenGui")
-		root.Name = "PlayerHudGui"
-		root.ResetOnSpawn = false
-		root.IgnoreGuiInset = true
-		root.Parent = playerGui
-	end
+        local playerGui = localPlayer:WaitForChild("PlayerGui")
 
-	return root
+        local hudRootGui = playerGui:FindFirstChild("PlayerHudGui")
+
+        if not hudRootGui then
+                hudRootGui = Instance.new("ScreenGui")
+                hudRootGui.Name = "PlayerHudGui"
+                hudRootGui.ResetOnSpawn = false
+                hudRootGui.IgnoreGuiInset = true
+                hudRootGui.Parent = playerGui
+        end
+
+        return hudRootGui
 end
 
-local function getOrCreateCoinsTextLabel(gui)
-	local label = gui:FindFirstChild("CoinsTextLabel")
+local function getOrCreateCoinsTextLabel(hudRootGui: ScreenGui)
+        local coinsTextLabel = hudRootGui:FindFirstChild("CoinsTextLabel")
 
-	if not label then
-		label = Instance.new("TextLabel")
-		label.Name = "CoinsTextLabel"
-		label.Size = UDim2.new(0, 200, 0, 40)
-		label.Position = UDim2.new(0, 10, 0, 40)
-		label.BackgroundTransparency = 0.3
-		label.TextScaled = true
-		label.Font = Enum.Font.GothamBold
-		label.TextColor3 = Color3.new(1, 1, 1)
-		label.Parent = gui
-	end
+        if not coinsTextLabel then
+                coinsTextLabel = Instance.new("TextLabel")
+                coinsTextLabel.Name = "CoinsTextLabel"
+                coinsTextLabel.Size = UDim2.new(0, 200, 0, 40)
+                coinsTextLabel.Position = UDim2.new(0, 10, 0, 40)
+                coinsTextLabel.BackgroundTransparency = 0.3
+                coinsTextLabel.TextScaled = true
+                coinsTextLabel.Font = Enum.Font.GothamBold
+                coinsTextLabel.TextColor3 = Color3.new(1, 1, 1)
+                coinsTextLabel.Parent = hudRootGui
+        end
 
-	return label
+        return coinsTextLabel
 end
 
-local hudRootGui = getOrCreateHudRootGui()
-local coinsTextLabel = getOrCreateCoinsTextLabel(hudRootGui)
+function PlayerHudDisplay.initializeHud(providedHudRootGui: ScreenGui?)
+        local hudRootGui = getOrCreateHudRootGui(providedHudRootGui)
+        local coinsTextLabel = getOrCreateCoinsTextLabel(hudRootGui)
 
-playerCoinsChangedEvent.OnClientEvent:Connect(function(amount)
-	coinsTextLabel.Text = "Coins: " .. tostring(tonumber(amount) or 0)
-end)
+        playerCoinsChangedEvent.OnClientEvent:Connect(function(amount)
+                coinsTextLabel.Text = "Coins: " .. tostring(tonumber(amount) or 0)
+        end)
+
+        return hudRootGui
+end
+
+return PlayerHudDisplay
