@@ -6,16 +6,12 @@
 
     "ReplicatedStorage": {
       "$className": "ReplicatedStorage",
-      "GameplayCore": {
-        "$path": "src/ReplicatedStorage/GameplayCore"
-      }
+      "$path": "src/ReplicatedStorage"
     },
 
     "ServerScriptService": {
       "$className": "ServerScriptService",
-      "GameplayCore": {
-        "$path": "src/ServerScriptService/GameplayCore"
-      }
+      "$path": "src/ServerScriptService"
     },
 
     "StarterPlayer": {
@@ -23,9 +19,7 @@
 
       "StarterPlayerScripts": {
         "$className": "StarterPlayerScripts",
-        "GameplayCoreClient": {
-          "$path": "src/StarterPlayer/StarterPlayerScripts/GameplayCoreClient"
-        }
+        "$path": "src/StarterPlayer/StarterPlayerScripts"
       },
 
       "StarterCharacterScripts": {
