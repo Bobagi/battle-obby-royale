@@ -1,31 +1,30 @@
 {
-  "name": "battle-obby-royale",
-  "servePort": 34872,
+  "name": "project",
   "tree": {
     "$className": "DataModel",
-
     "ReplicatedStorage": {
       "$className": "ReplicatedStorage",
+      "$ignoreUnknownInstances": true,
       "$path": "src/ReplicatedStorage"
     },
-
     "ServerScriptService": {
       "$className": "ServerScriptService",
+      "$ignoreUnknownInstances": true,
       "$path": "src/ServerScriptService"
     },
-
+    "SoundService": {
+      "$className": "SoundService",
+      "$ignoreUnknownInstances": true,
+      "$path": "src/SoundService"
+    },
     "StarterPlayer": {
       "$className": "StarterPlayer",
-
-      "StarterPlayerScripts": {
-        "$className": "StarterPlayerScripts",
-        "$path": "src/StarterPlayer/StarterPlayerScripts"
-      },
-
       "StarterCharacterScripts": {
         "$className": "StarterCharacterScripts",
+        "$ignoreUnknownInstances": true,
         "$path": "src/StarterPlayer/StarterCharacterScripts"
-      }
+      },
+      "$ignoreUnknownInstances": true
     }
   }
 }
