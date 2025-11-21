@@ -17,7 +17,7 @@ local function createActionGui()
 
         local layout = Instance.new("UIListLayout")
         layout.FillDirection = Enum.FillDirection.Vertical
-        layout.HorizontalAlignment = Enum.HorizontalAlignment.Left
+        layout.HorizontalAlignment = Enum.HorizontalAlignment.Right
         layout.VerticalAlignment = Enum.VerticalAlignment.Bottom
         layout.Padding = UDim.new(0, 8)
         layout.SortOrder = Enum.SortOrder.LayoutOrder

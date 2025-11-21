@@ -65,8 +65,10 @@ function ActionManager.bindAction(
 	actionFrame.LayoutOrder = displayOrder or 0
 	actionFrame.Parent = actionGui.ListFrame
 
-	binding.frame = actionFrame
-	ActionManager._updateInputDisplay(binding, InputCategorizer.getLastInputCategory())
+        binding.frame = actionFrame
+        ActionManager._updateInputDisplay(binding, InputCategorizer.getLastInputCategory())
+
+        print(string.format("[Movement][ActionManager] HUD action frame created for %s", actionName))
 
 	-- Create a wrapper for the callback function so the UI can be updated in sync with the action
 	local callbackWrapper = function(...)

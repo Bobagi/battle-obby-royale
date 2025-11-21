@@ -88,6 +88,8 @@ function Controller:setAction(action: string)
         self.character:SetAttribute(lastTimeAttribute, os.clock())
         self.character:SetAttribute(Constants.ACTION_ATTRIBUTE, action)
 
+        print(string.format("[Movement][Controller] Action set to %s", action))
+
         local setActionRemote = resolveSetActionRemote()
         if setActionRemote then
                 setActionRemote:FireServer(action)

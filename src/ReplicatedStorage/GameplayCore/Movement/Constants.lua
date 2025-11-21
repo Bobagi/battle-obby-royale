@@ -2,7 +2,7 @@ local StarterPlayer = game:GetService("StarterPlayer")
 
 local Constants = {
 	-- Input management
-	KEYBOARD_SPECIAL_KEY_CODE = Enum.KeyCode.LeftShift,
+        KEYBOARD_SPECIAL_KEY_CODE = Enum.KeyCode.E,
 	GAMEPAD_SPECIAL_KEY_CODE = Enum.KeyCode.ButtonX,
 	CONTROLLER_RENDER_STEP_BIND = "PlatformerControl",
 	SPECIAL_ACTION_BIND = "Dash/Roll",

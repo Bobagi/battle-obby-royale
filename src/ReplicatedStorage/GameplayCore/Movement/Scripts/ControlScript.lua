@@ -21,9 +21,14 @@ local player = Players.LocalPlayer
 local currentController = nil
 local wasJumping = false
 
+local function logMovementFlow(stepDescription: string)
+        print(string.format("[Movement][ControlScript] %s", stepDescription))
+end
+
 local function onCharacterAdded(character: Model)
-	-- Create a new controller for the character
-	local controller = Controller.new(character)
+        -- Create a new controller for the character
+        local controller = Controller.new(character)
+        logMovementFlow("Controller created for new character")
 
 	-- Clean up the controller when the character is Destroyed
 	local ancestryChangedConnection
@@ -58,14 +63,15 @@ local function onRenderStep(deltaTime: number)
 	currentController.humanoid.Jump = false
 	wasJumping = isJumping
 
-	-- Update our own controller with the move direction
-	currentController:setInputDirection(moveDirection)
-	currentController:update(deltaTime)
+        -- Update our own controller with the move direction
+        currentController:setInputDirection(moveDirection)
+        currentController:update(deltaTime)
 
-	-- If the humanoid was attempting to jump, perform a jump action
-	if shouldJump then
-		currentController:performAction("BaseJump")
-	end
+        -- If the humanoid was attempting to jump, perform a jump action
+        if shouldJump then
+                logMovementFlow("RenderStep detected jump input; routing to BaseJump")
+                currentController:performAction("BaseJump")
+        end
 end
 
 local function onSpecialActionInput(_input: string, inputState: Enum.UserInputState, _inputObject: InputObject)
@@ -73,12 +79,13 @@ local function onSpecialActionInput(_input: string, inputState: Enum.UserInputSt
 		return
 	end
 
-	if not currentController then
-		return
-	end
+        if not currentController then
+                return
+        end
 
-	-- Either roll or dash when the user activates their special move
-	currentController:performAction("BaseSpecial")
+        -- Either roll or dash when the user activates their special move
+        logMovementFlow("Special action input received; routing to BaseSpecial")
+        currentController:performAction("BaseSpecial")
 end
 
 local function initialize()

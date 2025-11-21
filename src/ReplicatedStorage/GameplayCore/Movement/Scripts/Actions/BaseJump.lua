@@ -10,32 +10,37 @@ local Constants = require(ReplicatedStorage.GameplayCore.Movement.Constants)
 local Action = {}
 
 function Action.perform(characterController)
-	-- The character can't do anything while stunned or recovering
-	local action = characterController:getAction()
-	if action == "Stun" or action == "Recover" then
-		return
-	end
+        print("[Movement][BaseJump] Jump pipeline entered")
+        -- The character can't do anything while stunned or recovering
+        local action = characterController:getAction()
+        if action == "Stun" or action == "Recover" then
+                print("[Movement][BaseJump] Blocked because character is stunned or recovering")
+                return
+        end
 
 	-- If the character just started rolling, put them into a long jump
-	local timeSinceLastRoll = characterController:getTimeSinceAction("Roll")
+        local timeSinceLastRoll = characterController:getTimeSinceAction("Roll")
 
-	if timeSinceLastRoll <= Constants.LONG_JUMP_WINDOW then
-		characterController:performAction("LongJump")
-	else
-		local canJump = characterController:isGrounded()
-			or characterController:isSwimming()
-			or characterController:isClimbing()
-		-- Allow the character to still initiate a normal jump right after they've stopped being grounded.
-		-- This makes jumping off the edges of platforms feel more responsive.
-		local timeSinceGrounded = characterController:getTimeSinceGrounded()
-		local canCoyoteJump = timeSinceGrounded <= Constants.JUMP_COYOTE_TIME
+        if timeSinceLastRoll <= Constants.LONG_JUMP_WINDOW then
+                print("[Movement][BaseJump] Long jump window active; delegating to LongJump")
+                characterController:performAction("LongJump")
+        else
+                local canJump = characterController:isGrounded()
+                        or characterController:isSwimming()
+                        or characterController:isClimbing()
+                -- Allow the character to still initiate a normal jump right after they've stopped being grounded.
+                -- This makes jumping off the edges of platforms feel more responsive.
+                local timeSinceGrounded = characterController:getTimeSinceGrounded()
+                local canCoyoteJump = timeSinceGrounded <= Constants.JUMP_COYOTE_TIME
 
-		if canJump or canCoyoteJump then
-			characterController:performAction("Jump")
-		else
-			characterController:performAction("DoubleJump")
-		end
-	end
+                if canJump or canCoyoteJump then
+                        print("[Movement][BaseJump] Performing grounded jump path")
+                        characterController:performAction("Jump")
+                else
+                        print("[Movement][BaseJump] Performing double jump path")
+                        characterController:performAction("DoubleJump")
+                end
+        end
 end
 
 return Action
