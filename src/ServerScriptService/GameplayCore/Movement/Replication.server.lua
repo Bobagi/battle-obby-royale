@@ -10,8 +10,10 @@ local Constants = require(ReplicatedStorage.GameplayCore.Movement.Constants)
 local validateString = require(ServerScriptService.GameplayCore.Utility.TypeValidation.validateString)
 local validateAction = require(script.validateAction)
 
-local remotes = ReplicatedStorage.GameplayCore.Movement.Remotes
-local setActionRemote = remotes.SetAction
+local gameplayCoreFolder = ReplicatedStorage:WaitForChild("GameplayCore")
+local movementFolder = gameplayCoreFolder:WaitForChild("Movement")
+local remotesFolder = movementFolder:WaitForChild("Remotes")
+local setActionRemote = remotesFolder:WaitForChild("SetAction")
 
 local function onSetActionEvent(player: Player, action: string)
 	-- Validate arguments

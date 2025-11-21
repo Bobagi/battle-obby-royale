@@ -12,8 +12,10 @@ local disconnectAndClear = require(ReplicatedStorage.GameplayCore.Utility.discon
 
 local Actions = loadModules(script.Parent.Actions)
 
-local remotes = ReplicatedStorage.GameplayCore.Movement.Remotes
-local setActionRemote = remotes.SetAction
+local gameplayCoreFolder = ReplicatedStorage:WaitForChild("GameplayCore")
+local movementFolder = gameplayCoreFolder:WaitForChild("Movement")
+local remotesFolder = movementFolder:WaitForChild("Remotes")
+local setActionRemote = remotesFolder:WaitForChild("SetAction")
 
 local Controller = {}
 Controller.__index = Controller
