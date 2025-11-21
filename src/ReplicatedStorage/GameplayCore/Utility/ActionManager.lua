@@ -15,11 +15,12 @@ local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 
 local InputCategorizer = require(script.Parent.InputCategorizer)
-local InputMetadata = require(script.InputMetadata)
+local actionManagerAssetsFolder = script.Parent:WaitForChild("ActionManager")
+local InputMetadata = require(actionManagerAssetsFolder:WaitForChild("InputMetadata"))
 
 local player = Players.LocalPlayer :: Player
 local playerGui = player:WaitForChild("PlayerGui")
-local instances = require(script.Instances)
+local instances = require(actionManagerAssetsFolder:WaitForChild("Instances"))
 local actionGui = instances.ActionGui
 
 local HORIZONTAL_PADDING = 40

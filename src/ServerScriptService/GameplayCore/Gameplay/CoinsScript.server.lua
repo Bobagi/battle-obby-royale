@@ -11,8 +11,9 @@ local ServerScriptService = game:GetService("ServerScriptService")
 local Constants = require(ReplicatedStorage.GameplayCore.Gameplay.Constants)
 local validateInstance = require(ServerScriptService.GameplayCore.Utility.TypeValidation.validateInstance)
 
-local remotes = ReplicatedStorage.GameplayCore.Gameplay.Remotes
-local pickupCoinRemote = remotes.PickupCoin
+local gameplayFolder = ReplicatedStorage:WaitForChild("GameplayCore"):WaitForChild("Gameplay")
+local remotesFolder = gameplayFolder:WaitForChild("Remotes")
+local pickupCoinRemote = remotesFolder:WaitForChild("PickupCoin")
 
 local MAX_PICKUP_DISTANCE = 50
 

@@ -13,11 +13,115 @@ local playSoundFromSource = require(ReplicatedStorage.GameplayCore.Utility.playS
 local simpleParticleBurst = require(ReplicatedStorage.GameplayCore.Utility.simpleParticleBurst)
 
 local player = Players.LocalPlayer
-local visualTemplate = ReplicatedStorage.GameplayCore.Gameplay.Objects.Coin
-local pickupSoundTemplate = ReplicatedStorage.GameplayCore.Gameplay.Sounds.PickupCoin
-local pickupParticlesTemplate = ReplicatedStorage.GameplayCore.Gameplay.Effects.PickupParticles
-local remotes = ReplicatedStorage.GameplayCore.Gameplay.Remotes
-local pickupCoinRemote = remotes.PickupCoin
+local function getOrCreateFolder(parent: Instance, folderName: string): Folder
+        local existingChild = parent:FindFirstChild(folderName)
+        if existingChild and existingChild:IsA("Folder") then
+                return existingChild
+        end
+
+        if existingChild then
+                existingChild:Destroy()
+        end
+
+        local createdFolder = Instance.new("Folder")
+        createdFolder.Name = folderName
+        createdFolder.Parent = parent
+        return createdFolder
+end
+
+local function getOrCreateCoinTemplate(objectsFolder: Folder): Model
+        local existingTemplate = objectsFolder:FindFirstChild("Coin")
+        if existingTemplate and existingTemplate:IsA("Model") then
+                return existingTemplate
+        end
+
+        if existingTemplate then
+                existingTemplate:Destroy()
+        end
+
+        local coinModel = Instance.new("Model")
+        coinModel.Name = "Coin"
+
+        local coinPart = Instance.new("Part")
+        coinPart.Name = "CoinPart"
+        coinPart.Shape = Enum.PartType.Cylinder
+        coinPart.Size = Vector3.new(1.5, 0.35, 1.5)
+        coinPart.Material = Enum.Material.Metal
+        coinPart.Color = Color3.fromRGB(255, 215, 0)
+        coinPart.TopSurface = Enum.SurfaceType.Smooth
+        coinPart.BottomSurface = Enum.SurfaceType.Smooth
+        coinPart.Anchored = true
+        coinPart.CanCollide = false
+        coinPart.Parent = coinModel
+
+        coinModel.PrimaryPart = coinPart
+        coinModel.Parent = objectsFolder
+
+        return coinModel
+end
+
+local function getOrCreateSoundTemplate(soundsFolder: Folder): Sound
+        local existingTemplate = soundsFolder:FindFirstChild("PickupCoin")
+        if existingTemplate and existingTemplate:IsA("Sound") then
+                return existingTemplate
+        end
+
+        if existingTemplate then
+                existingTemplate:Destroy()
+        end
+
+        local pickupSound = Instance.new("Sound")
+        pickupSound.Name = "PickupCoin"
+        pickupSound.SoundId = "rbxassetid://0"
+        pickupSound.Volume = 0.6
+        pickupSound.PlayOnRemove = false
+        pickupSound.Parent = soundsFolder
+
+        return pickupSound
+end
+
+local function getOrCreatePickupParticles(effectsFolder: Folder): ParticleEmitter
+        local existingTemplate = effectsFolder:FindFirstChild("PickupParticles")
+        if existingTemplate and existingTemplate:IsA("ParticleEmitter") then
+                return existingTemplate
+        end
+
+        if existingTemplate then
+                existingTemplate:Destroy()
+        end
+
+        local particleEmitter = Instance.new("ParticleEmitter")
+        particleEmitter.Name = "PickupParticles"
+        particleEmitter.Texture = "rbxassetid://243660364"
+        particleEmitter.Speed = NumberRange.new(2, 4)
+        particleEmitter.Rate = 0
+        particleEmitter.Lifetime = NumberRange.new(0.35, 0.5)
+        particleEmitter.SpreadAngle = Vector2.new(360, 360)
+        particleEmitter.Parent = effectsFolder
+
+        return particleEmitter
+end
+
+local gameplayFolder = ReplicatedStorage:WaitForChild("GameplayCore"):WaitForChild("Gameplay")
+local objectsFolder = getOrCreateFolder(gameplayFolder, "Objects")
+local soundsFolder = getOrCreateFolder(gameplayFolder, "Sounds")
+local effectsFolder = getOrCreateFolder(gameplayFolder, "Effects")
+local remotesFolder = getOrCreateFolder(gameplayFolder, "Remotes")
+
+local visualTemplate = getOrCreateCoinTemplate(objectsFolder)
+local pickupSoundTemplate = getOrCreateSoundTemplate(soundsFolder)
+local pickupParticlesTemplate = getOrCreatePickupParticles(effectsFolder)
+local pickupCoinRemote = remotesFolder:FindFirstChild("PickupCoin")
+if not pickupCoinRemote or not pickupCoinRemote:IsA("RemoteFunction") then
+        if pickupCoinRemote then
+                pickupCoinRemote:Destroy()
+        end
+
+        local createdRemoteFunction = Instance.new("RemoteFunction")
+        createdRemoteFunction.Name = "PickupCoin"
+        createdRemoteFunction.Parent = remotesFolder
+        pickupCoinRemote = createdRemoteFunction
+end
 
 local coinHapticTemplate = script.CoinHaptic
 local audioEmitterTemplate = script.CoinAudioEmitter

@@ -8,7 +8,7 @@ local ServerScriptService = game:GetService("ServerScriptService")
 
 local Constants = require(ReplicatedStorage.GameplayCore.Movement.Constants)
 local validateString = require(ServerScriptService.GameplayCore.Utility.TypeValidation.validateString)
-local validateAction = require(script.validateAction)
+local validateAction = require(ServerScriptService.GameplayCore.Movement.Replication.validateAction)
 
 local gameplayCoreFolder = ReplicatedStorage:WaitForChild("GameplayCore")
 local movementFolder = gameplayCoreFolder:WaitForChild("Movement")
