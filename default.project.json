@@ -1,0 +1,37 @@
+{
+  "name": "battle-obby-royale",
+  "servePort": 34872,
+  "tree": {
+    "$className": "DataModel",
+
+    "ReplicatedStorage": {
+      "$className": "ReplicatedStorage",
+      "GameplayCore": {
+        "$path": "src/ReplicatedStorage/GameplayCore"
+      }
+    },
+
+    "ServerScriptService": {
+      "$className": "ServerScriptService",
+      "GameplayCore": {
+        "$path": "src/ServerScriptService/GameplayCore"
+      }
+    },
+
+    "StarterPlayer": {
+      "$className": "StarterPlayer",
+
+      "StarterPlayerScripts": {
+        "$className": "StarterPlayerScripts",
+        "GameplayCoreClient": {
+          "$path": "src/StarterPlayer/StarterPlayerScripts/GameplayCoreClient"
+        }
+      },
+
+      "StarterCharacterScripts": {
+        "$className": "StarterCharacterScripts",
+        "$path": "src/StarterPlayer/StarterCharacterScripts"
+      }
+    }
+  }
+}
